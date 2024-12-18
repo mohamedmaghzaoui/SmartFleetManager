@@ -7,6 +7,7 @@ import * as Location from 'expo-location'; // Import Expo Location API
 export const MapScreen = () => {
   const [location, setLocation] = useState(null); // State to store user's location
   const [errorMsg, setErrorMsg] = useState(null); // State to store error message
+  //start regison
   const [region, setRegion] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -98,7 +99,7 @@ export const MapScreen = () => {
         )}
       </MapView>
 
-      <Button title="Get Location" onPress={getLocation} />
+      {/* <Button title="Get Location" onPress={getLocation} /> */}
     </View>
   );
 };
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center', // Centering the content
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   map: {
     width: '100%',
