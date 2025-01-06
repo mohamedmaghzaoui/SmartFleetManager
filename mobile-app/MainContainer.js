@@ -45,7 +45,7 @@ export const MainContainer = () => {
             // Return the Ionicons component
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "blue", // Active tab color
+          tabBarActiveTintColor: "#1F87FE", // Active tab color
           tabBarInactiveTintColor: "gray", // Inactive tab color
         })}
       >
