@@ -58,7 +58,7 @@ export const MapScreen = () => {
       const subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 1000, // Update every 1 second
+          timeInterval: 10000, // Update every 1 second
           distanceInterval: 1, // Update if location changes by 1 meter
         },
         (newLocation) => {
