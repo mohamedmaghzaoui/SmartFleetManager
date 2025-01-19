@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView } from 'react-native';
+import {  Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import {TextInput,Button} from "react-native-paper"
 import * as ImagePicker from 'expo-image-picker';
 
 export const CameraScreen = () => {
@@ -35,7 +36,11 @@ export const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput defaultValue="hi" style={styles.input} />
+      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE'  mode='outlined' label={"name"}  style={styles.input} />
+      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
+      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
+      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
+      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
       <TouchableOpacity onPress={pickImages} style={styles.button}>
         <Text style={styles.text}>Pick Images</Text>
       </TouchableOpacity>
@@ -58,11 +63,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
+  
     padding: 10,
     marginBottom: 20,
+    marginTop:20,
     width: '80%',
   },
   button: {
