@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import {  Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import {TextInput,Button} from "react-native-paper"
+
+import {TextInput} from "react-native-paper";
+import { ProgressBar as PaperProgressBar } from 'react-native-paper';
+
 import * as ImagePicker from 'expo-image-picker';
 
 export const CameraScreen = () => {
@@ -36,11 +39,18 @@ export const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE'  mode='outlined' label={"name"}  style={styles.input} />
-      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
-      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
-      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
-      <TextInput outlineColor='#1F87FE' activeOutlineColor='#1F87FE' mode='outlined' label={"age"} defaultValue="hi" style={styles.input} />
+     <PaperProgressBar progress={0.5} color="#1F87FE" style={styles.progress} />
+
+    <Text style={styles.title}>Personalise your experience</Text>
+    <Text style={styles.smallText}>Please Fill personal information</Text>
+   
+
+
+      <TextInput   outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Firstname"}  style={styles.input} />
+      <TextInput  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Lastname"}  style={styles.input} />
+      <TextInput keyboardType='numeric'  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"mobile"}  style={styles.input} />
+      <TextInput  keyboardType="email-address"  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"email"}  style={styles.input} />
+      
       <TouchableOpacity onPress={pickImages} style={styles.button}>
         <Text style={styles.text}>Pick Images</Text>
       </TouchableOpacity>
@@ -61,9 +71,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
+  title:{
+    fontSize:25,
+    fontWeight:"bold",
+
+  },
+  progress:{
+    margin:20,
+    width:327,
+    height:8,
+  },
   input: {
+    
     height: 40,
-  
+    backgroundColor:"#fff",
     padding: 10,
     marginBottom: 20,
     marginTop:20,
@@ -78,6 +99,11 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  smallText:{
+    color:"grey",
+    textAlign:"right"
+
   },
   imageContainer: {
     flexDirection: 'row',
