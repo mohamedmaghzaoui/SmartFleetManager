@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import { UserForm } from './Form/UserForm';
 import { CarForm } from './Form/CarForm';
@@ -13,9 +13,9 @@ export const CameraScreen = () => {
   
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
      {currentForm==0 ?<UserForm setcurrentForm={setcurrentForm} /> : <CarForm setcurrentForm={setcurrentForm} /> }
-    </View>
+    </ScrollView>
   );
 };
 
