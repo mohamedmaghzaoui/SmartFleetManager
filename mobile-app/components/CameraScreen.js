@@ -6,7 +6,22 @@ import { CarForm } from './Form/CarForm';
 
 
 export const CameraScreen = () => {
+  const [formData,setFormData]=useState(({
+    firstName:"",
+    lastName:"",
+    phone:"",
+    email:"",
+    carModel:"",
+    manufactureYear:"",
+    LicensePlateNumber:"",
+    image:null
+  }))
+
+  
   const [currentForm, setcurrentForm] = useState(0)
+  const handleChange = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+  };
   const setForm=(form)=>{
     setcurrentForm(form)
   }
@@ -14,7 +29,7 @@ export const CameraScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-     {currentForm==0 ?<UserForm setcurrentForm={setcurrentForm} /> : <CarForm setcurrentForm={setcurrentForm} /> }
+     {currentForm==0 ?<UserForm formData={formData} handleChange={handleChange} setcurrentForm={setcurrentForm} /> : <CarForm handleChange={handleChange} formData={formData} setcurrentForm={setcurrentForm} /> }
     </ScrollView>
   );
 };

@@ -3,8 +3,9 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView,Button } fr
 import * as ImagePicker from "expo-image-picker";
 import { ProgressBar as PaperProgressBar,TextInput } from 'react-native-paper';
 
-export const CarForm = ({setcurrentForm}) => {
+export const CarForm = ({setcurrentForm,handleChange,formData}) => {
     const [images, setImages] = useState([]);
+    console.log(formData)
 
     // Function to request permissions for both camera and media library
     const getPermission = async () => {
@@ -107,9 +108,9 @@ export const CarForm = ({setcurrentForm}) => {
             <Text style={styles.title}>Personalise your experience</Text>
             <Text style={styles.smallText}>Please Fill car information</Text>
 
-            <TextInput   outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Car Model"}  style={styles.input} />
-            <TextInput  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Manufacture year"}  style={styles.input} />
-            <TextInput  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"License Plate Number"}  style={styles.input} />
+            <TextInput  onChangeText={(text) => handleChange("carModel", text)}  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Car Model"}  style={styles.input} />
+            <TextInput onChangeText={(text) => handleChange("manufactureYear", text)}  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"Manufacture year"}  style={styles.input} />
+            <TextInput onChangeText={(text) => handleChange("licensePlateNumber", text)}  outlineColor='lightgrey' activeOutlineColor='#1F87FE'  mode='outlined' label={"License Plate Number"}  style={styles.input} />
             {/* Button to take photo */}
             <TouchableOpacity onPress={captureImage} style={styles.button}>
                 <Text style={styles.text}>Take Photo</Text>
