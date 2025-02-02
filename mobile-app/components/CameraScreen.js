@@ -13,8 +13,8 @@ export const CameraScreen = () => {
     email:"",
     carModel:"",
     manufactureYear:"",
-    LicensePlateNumber:"",
-    image:null
+    icensePlateNumber:"",
+    image:[]
   }))
 
   
