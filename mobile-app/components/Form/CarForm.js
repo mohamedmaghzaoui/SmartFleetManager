@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Button } from "react-n
 import * as ImagePicker from "expo-image-picker";
 import { ProgressBar as PaperProgressBar, TextInput } from 'react-native-paper';
 import axios from "axios";
+import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store'; // Importing expo-secure-store for secure storage
 
 import * as Crypto from 'expo-crypto'
@@ -15,6 +16,8 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
     useEffect(() => {
         const getDeviceId = async () => {
             try {
+                
+
                 // Try to get the device ID from secure storage
                 let storedDeviceId = await SecureStore.getItemAsync('deviceId');
                 if (!storedDeviceId) {
@@ -22,7 +25,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
                     // If there's no device ID stored, generate one using Expo Random
                     storedDeviceId = await Crypto.digestStringAsync(
                         Crypto.CryptoDigestAlgorithm.SHA256,
-                        'GitHub stars are neat 🌟'
+                        Device.brand + Device.modelName + Math.random().toString()
                       );
                     await SecureStore.setItemAsync('deviceId', storedDeviceId);
                     console.log("New device ID generated:", storedDeviceId);
