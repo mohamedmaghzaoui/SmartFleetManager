@@ -1,13 +1,79 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Button } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ProgressBar as PaperProgressBar, TextInput } from 'react-native-paper';
+import axios from "axios";
+import * as SecureStore from 'expo-secure-store'; // Importing expo-secure-store for secure storage
 
+import * as Crypto from 'expo-crypto'
 export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
-    console.log(formData)
-    const [images, setImages] = useState([]);
+    const url = process.env.EXPO_PUBLIC_API_URL + "api/cars"; // Flask backend URL
+    const [image, setImage] = useState(null); // Store only one image URI
+    const [deviceId, setDeviceId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);  // Loading state for deviceId
 
-    // Function to request permissions for camera and media library
+    useEffect(() => {
+        const getDeviceId = async () => {
+            try {
+                // Try to get the device ID from secure storage
+                let storedDeviceId = await SecureStore.getItemAsync('deviceId');
+                if (!storedDeviceId) {
+                    console.log("No device ID found, generating a new one...");
+                    // If there's no device ID stored, generate one using Expo Random
+                    storedDeviceId = await Crypto.digestStringAsync(
+                        Crypto.CryptoDigestAlgorithm.SHA256,
+                        'GitHub stars are neat 🌟'
+                      );
+                    await SecureStore.setItemAsync('deviceId', storedDeviceId);
+                    console.log("New device ID generated:", storedDeviceId);
+                } else {
+                    console.log("Device ID found in storage:", storedDeviceId);
+                }
+                setDeviceId(storedDeviceId);  // Set the device ID to state
+                setIsLoading(false);  // Set loading to false when device ID is ready
+            } catch (error) {
+                console.log("Error getting device ID:", error);
+            }
+        };
+
+        getDeviceId();  // Call the function to fetch or generate device ID
+    }, []);
+
+    const handleSubmit = async () => {
+        // Check if deviceId is ready before sending the request
+        if (!deviceId) {
+            console.log("Device ID is not ready");
+            return;
+        }
+
+        try {
+            const newFormData = new FormData();
+            newFormData.append("carModel", formData.carModel);
+            newFormData.append("email", formData.email);
+            newFormData.append("phone", formData.phone);
+            newFormData.append("firstName", formData.firstName);
+            newFormData.append("lastName", formData.lastName);
+            newFormData.append("manufactureYear", formData.manufactureYear);
+            newFormData.append("licensePlateNumber", formData.licensePlateNumber);
+            newFormData.append("image", {
+                uri: formData.image.uri,
+                type: "image/jpeg",
+                name: "image.jpg"
+            });
+            newFormData.append("deviceId", deviceId);  // Attach the device ID to the request
+
+            const response = await axios.post(url, newFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            console.log(response.data);
+        } catch (err) {
+            console.log("Error:", err.response ? err.response.data : err.message);
+        }
+    };
+
     const getPermission = async () => {
         const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
         const mediaPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -19,15 +85,9 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
         return true;
     };
 
-    // Function to handle image selection and update formData
     const handleImageSelection = async (source) => {
         const hasPermission = await getPermission();
         if (!hasPermission) return;
-
-        if (images.length >= 3) {
-            alert("You can only pick up to 3 images!");
-            return;
-        }
 
         let result;
         if (source === "camera") {
@@ -37,29 +97,24 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
             });
         } else {
             result = await ImagePicker.launchImageLibraryAsync({
-                selectionLimit: 3 - images.length,
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
             });
         }
 
         if (!result.canceled && result.assets) {
-            const uris = result.assets.map((asset) => asset.uri);
-            setImages((prevImages) => {
-                const newImages = [...prevImages, ...uris].slice(0, 3);
-                updateFormData(newImages);
-                return newImages;
-            });
+            const uri = result.assets[0].uri;
+            setImage(uri);
+            updateFormData(uri);
         }
     };
 
-    // Function to update formData with selected images
-    const updateFormData = (imageUris) => {
-        handleChange("images", imageUris.map((uri, index) => ({
-            uri,
+    const updateFormData = (imageUri) => {
+        handleChange("image", {
+            uri: imageUri,
             type: "image/jpeg",
-            name: `image_${index + 1}.jpg`
-        })));
+            name: "image.jpg"
+        });
     };
 
     return (
@@ -82,18 +137,27 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
                 <Text style={styles.text}>Choose from Gallery</Text>
             </TouchableOpacity>
 
-            <ScrollView contentContainerStyle={styles.imageContainer}>
-                {images.map((uri, index) => (
-                    <View key={index} style={styles.imageWrapper}>
-                        <Image source={{ uri }} style={styles.image} />
-                    </View>
-                ))}
-            </ScrollView>
+            {/* Display selected image */}
+            {image && (
+                <View style={styles.imageWrapper}>
+                    <Image source={{ uri: image }} style={styles.image} />
+                    <TouchableOpacity onPress={() => setImage(null)} style={styles.changeButton}>
+                        <Text style={styles.text}>Change Photo</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
             <Button
                 onPress={() => setcurrentForm(0)}
                 title="previous"
                 color="#007BFF"
+            />
+            {/* Disable the button until the device ID is ready */}
+            <Button
+                onPress={() => handleSubmit()}  // Ensure deviceId is ready before submitting
+                title={isLoading ? "Loading..." : "Send"}  // Show 'Loading...' while waiting for deviceId
+                color={isLoading ? "#ddd" : "green"}
+                disabled={isLoading}  // Disable the button if deviceId is not ready
             />
         </View>
     );
@@ -125,19 +189,24 @@ const styles = StyleSheet.create({
         color: "grey",
         textAlign: "right"
     },
-    imageContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "center",
-    },
     imageWrapper: {
-        margin: 5,
+        marginTop: 20,
         alignItems: "center",
     },
     image: {
         width: 100,
         height: 100,
         borderRadius: 10,
+    },
+    changeButton: {
+        marginTop: 10,
+        backgroundColor: "#007BFF",
+        padding: 10,
+        borderRadius: 8,
+        alignItems: "center",
+    },
+    text: {
+        color: "#fff",
     },
     input: {
         height: 40,

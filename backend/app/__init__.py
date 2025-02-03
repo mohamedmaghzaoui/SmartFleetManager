@@ -11,14 +11,11 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
   
-
-    # Configuration de MongoDB
     app.config["MONGO_URI"] = os.getenv("MONGO_URI")
-
     mongo.init_app(app)
 
-    # Importer et enregistrer les routes
     from .routes import main
     app.register_blueprint(main)
 
+    print(app.url_map)  # Debugging: Show all registered routes
     return app
