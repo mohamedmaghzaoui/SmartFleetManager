@@ -1,69 +1,85 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground ,TouchableOpacity} from 'react-native';
-
+import React, { useContext } from 'react';
+import { View, Text,ScrollView, StyleSheet, Image, ImageBackground ,TouchableOpacity} from 'react-native';
+import { CarContext } from '../CarContext';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 // DashboardScreen Component
 export const DashboardScreen = ({ navigation }) => {
+  const {car,loading}=useContext(CarContext)
+  const currentDate = new Date().toLocaleDateString(); // You can format it as needed
+  if (!car) {
+    return (
+      <View>
+        <Text>no data</Text>
+      </View>
+    )
+  }
   return (
-    <View style={styles.mainContainer}>
-      {/* First Container */}
-      <View style={styles.horizontalContainer}>
-        <View style={styles.smallCard}>
-          <Text style={styles.title}>Vitesse</Text>
-          <Text style={styles.speed}>20 km/h</Text>
-          <Text style={styles.date}>06/01/2025</Text>
-        </View>
-        <View style={styles.smallCard}>
-          <Text style={styles.title}>Carburant</Text>
-          <Text style={styles.speed}>20%</Text>
-          <Text style={styles.date}>06/01/2025</Text>
-        </View>
-      </View>
+    <ScrollView style={styles.mainContainer}>
+    {/* First Container */}
+    <View style={styles.horizontalContainer}>
+      <View style={styles.smallCard}>
+      <FontAwesome5 name="tachometer-alt" size={20} color="#1F87FE" />
 
-      {/* Second Container */}
-      <View style={styles.largeCard}>
-        <Text style={styles.carTitle}>BMW</Text>
-        <Text style={styles.carModel}>3008</Text>
-        <View style={styles.horizontalLine} />
-        <View style={styles.horizontalContainer}>
-          <Text style={styles.carYear}>2015</Text>
-          <Text style={styles.carEngine}>2.0L Turbo</Text>
-        </View>
+        <Text style={styles.title}>Speed</Text>
+        <Text style={styles.speed}>{car.speed} km/h</Text>
+        <Text style={styles.date}>{currentDate}</Text>
       </View>
+      <View style={styles.smallCard}>
+      <FontAwesome5 name="smog" size={20} color="#1F87FE" />
 
-      {/* Third Container with Background Image */}
-      <ImageBackground
-      style={styles.backgroundContainer}
-      source={{
-        uri: 'https://www.leparisien.fr/resizer/efCs6S_-rGdBhi2P0NQeijAEUws=/932x582/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/5UAWECLJVFOXQS6RPEGA3XXU3M.jpg',
-      }}
-    >
-      <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Map')}>
-          <Image
-            style={styles.icon}
-            source={{
-              uri: 'https://cdn-icons-png.flaticon.com/512/709/709496.png',
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
-  
-
-      {/* Fourth Container */}
-      <View style={styles.horizontalContainer}>
-        <View style={styles.smallCard}>
-          <Text style={styles.title}>Vitesse</Text>
-          <Text style={styles.speed}>20 km/h</Text>
-          <Text style={styles.date}>06/01/2025</Text>
-        </View>
-        <View style={styles.smallCard}>
-          <Text style={styles.title}>Carburant</Text>
-          <Text style={styles.speed}>20%</Text>
-          <Text style={styles.date}>06/01/2025</Text>
-        </View>
+        <Text style={styles.title}>Emissions</Text>
+        <Text style={styles.speed}>{car.emissions}</Text>
+        <Text style={styles.date}>{currentDate}</Text>
       </View>
     </View>
+
+    {/* Second Container */}
+    <View style={styles.largeCard}>
+      <Text style={styles.carTitle}>{car.carModel}</Text>
+      <Text style={styles.carModel}>{car.licensePlateNumber}</Text>
+      <View style={styles.horizontalLine} />
+      <View style={styles.horizontalContainer}>
+        <Text style={styles.carYear}>{car.manufactureYear}</Text>
+        <Text style={styles.carEngine}>2.0L Turbo</Text>
+      </View>
+    </View>
+
+    {/* Third Container with Background Image */}
+    <ImageBackground
+    style={styles.backgroundContainer}
+    source={{
+      uri: 'https://www.leparisien.fr/resizer/efCs6S_-rGdBhi2P0NQeijAEUws=/932x582/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/5UAWECLJVFOXQS6RPEGA3XXU3M.jpg',
+    }}
+  >
+    <View style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate('Map')}>
+        <Image
+          style={styles.icon}
+          source={{
+            uri: 'https://cdn-icons-png.flaticon.com/512/709/709496.png',
+          }}
+        />
+      </TouchableOpacity>
+    </View>
+  </ImageBackground>
+
+
+    {/* Fourth Container */}
+    <View style={styles.horizontalContainer}>
+      <View style={styles.smallCard}>
+      <FontAwesome5 name="road" size={20} color="#1F87FE" />
+        <Text style={styles.title}>Total Distance</Text>
+        <Text style={styles.speed}>{car.distance} km</Text>
+        <Text style={styles.date}>{currentDate}</Text>
+      </View>
+      <View style={styles.smallCard}>
+      <FontAwesome5 name="gas-pump" size={20} color="#1F87FE" />
+        <Text style={styles.title}>Fuel</Text>
+        <Text style={styles.speed}>{car.fuel_consumption}</Text>
+      <Text style={styles.date}>{currentDate}</Text>
+      </View>
+    </View>
+  </ScrollView>
   );
 };
 
@@ -77,6 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+
   smallCard: {
     backgroundColor: '#fff',
     borderRadius: 20,
