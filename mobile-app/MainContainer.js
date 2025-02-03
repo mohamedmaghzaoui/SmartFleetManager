@@ -3,16 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
-
 import { DashboardScreen } from "./components/DashboardScreen";
 import { MapScreen } from "./components/MapScreen";
-
-import {NotificationScreen} from "./components/NotificationScreen"
+import { ProfileScreen } from "./components/ProfileScreen";
 import { CameraScreen } from "./components/CameraScreen";
 import { CarScreen } from "./components/CarScreen";
-
-
-
 
 // Create the bottom tab navigator
 const Tab = createBottomTabNavigator();
@@ -29,17 +24,14 @@ export const MainContainer = () => {
 
             if (route.name === "Dashboard") {
               iconName = focused ? "home" : "home-outline"; // Home icon
-
             } else if (route.name === "Map") {
               iconName = focused ? "map" : "map-outline"; // Map icon
-
             } else if (route.name === "Camera") {
               iconName = focused ? "camera" : "camera-outline"; // Camera icon
-
-            } else if (route.name === "Notification") {
-              iconName = focused ? "notifications" : "notifications-outline"; // Notification icon
+            } else if (route.name === "Profile") {
+              iconName = focused ? "person" : "person-outline"; // Profile icon
             } else if (route.name === "Car") {
-              iconName = focused ? "car" : "car-outline"; // Notification icon
+              iconName = focused ? "car" : "car-outline"; // Car icon
             }
 
             // Return the Ionicons component
@@ -54,9 +46,7 @@ export const MainContainer = () => {
         <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Dashboard" component={DashboardScreen} />
         <Tab.Screen name="Camera" component={CameraScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
-   
-        
+        <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
