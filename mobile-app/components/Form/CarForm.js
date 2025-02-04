@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, Button } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ProgressBar as PaperProgressBar, TextInput } from 'react-native-paper';
 import axios from "axios";
+import { CarContext } from "../../CarContext";
+import { useNavigation } from '@react-navigation/native';
 import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store'; // Importing expo-secure-store for secure storage
 
 import * as Crypto from 'expo-crypto'
 export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
+    const navigation = useNavigation();
+    const {setShouldRefetch}=useContext(CarContext)
     const url = process.env.EXPO_PUBLIC_API_URL + "api/cars"; // Flask backend URL
     const [image, setImage] = useState(null); // Store only one image URI
     const [deviceId, setDeviceId] = useState(null);
@@ -74,6 +78,10 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
             console.log(response.data);
         } catch (err) {
             console.log("Error:", err.response ? err.response.data : err.message);
+        }finally{
+            setShouldRefetch(true)
+            navigation.navigate('Dashboard');
+
         }
     };
 
