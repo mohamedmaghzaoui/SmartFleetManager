@@ -1,0 +1,29 @@
+# Environnement virtuel
+venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers d'environnement de développement
+.env
+*.env
+
+# Fichiers de configuration de l'IDE (par exemple, VS Code)
+.vscode/
+
+# Fichiers de base de données locaux
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Dossier de cache
+__pycache__
+
+# Fichiers système (sur Mac et Windows)
+.DS_Store
+Thumbs.db
