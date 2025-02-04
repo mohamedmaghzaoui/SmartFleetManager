@@ -2,7 +2,7 @@ import google.generativeai as genai
 import base64
 
 # Configure the API key for Google Generative AI
-genai.configure(api_key="AIzaSyA_X9DOnCNSk_DA1Y9YOiki_dA9gLNm7KQ")
+genai.configure(api_key="")
 model = genai.GenerativeModel(model_name="gemini-1.5-pro")
 
 # Use the correct file path format
