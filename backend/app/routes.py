@@ -10,6 +10,7 @@ main = Blueprint('main', __name__)
 cars_collection = mongo.db.cars
 
 # Simulate an AI-based function to extract data from an image
+
 def process_image_for_data(image_file):
     # AI image processing logic (for now, we'll return random data)
     return {
@@ -17,8 +18,15 @@ def process_image_for_data(image_file):
         "fuel_consumption": round(random.uniform(5.0, 15.0), 2),  # Random fuel consumption in L/100km
         "emissions": round(random.uniform(50.0, 200.0), 2),  # Random emissions in g CO2/km
         "distance": random.randint(5000, 20000),  # Random distance in km
-        "next_maintenance": random.randint(1000, 5000)  # Random maintenance distance in km
+        "next_maintenance": random.randint(1000, 5000),  # Random maintenance distance in km
+        
+        # Reasonable random data for car metrics
+        "fuel_level": random.randint(20, 100),  # Fuel level as a percentage (20% to 100%)
+        "engine_temperature": random.randint(70, 110),  # Engine temperature in Celsius (70°C to 110°C)
+        "battery_voltage": round(random.uniform(12.5, 14.5), 2),  # Battery voltage in volts (12.5V to 14.5V)
+        "oil_pressure": round(random.uniform(20.0, 80.0), 2),  # Oil pressure in PSI (20 to 80 PSI)
     }
+
 
 # Route to add or update a car (with image upload)
 @main.route('/', methods=['GET'])
@@ -67,20 +75,24 @@ def add_or_update_car():
         if existing_car:
             # Update the existing car's data
             update_data = {
-                "carModel": car_model,
-                "firstName": first_name,
-                "lastName": last_name,
-                "phone": phone,
-                "email": email,
-                "manufactureYear": manufacture_year,
-                "licensePlateNumber": license_plate_number,
-                "speed": extracted_data["speed"],
-                "fuel_consumption": extracted_data["fuel_consumption"],
-                "emissions": extracted_data["emissions"],
-                "distance": extracted_data["distance"],
-                "next_maintenance": extracted_data["next_maintenance"],
-                "deviceId": device_id
-            }
+            "carModel": car_model,
+            "firstName": first_name,
+            "lastName": last_name,
+            "phone": phone,
+            "email": email,
+            "manufactureYear": manufacture_year,
+            "licensePlateNumber": license_plate_number,
+            "speed": extracted_data["speed"],
+            "fuel_consumption": extracted_data["fuel_consumption"],
+            "emissions": extracted_data["emissions"],
+            "distance": extracted_data["distance"],
+            "next_maintenance": extracted_data["next_maintenance"],
+            # Adding the newly generated random data
+            "fuel_level": extracted_data["fuel_level"],
+            "engine_temperature": extracted_data["engine_temperature"],
+            "battery_voltage": extracted_data["battery_voltage"],
+            "oil_pressure": extracted_data["oil_pressure"]
+        }
             
             cars_collection.update_one({"deviceId": device_id}, {"$set": update_data})
 
@@ -88,20 +100,27 @@ def add_or_update_car():
         else:
             # Insert a new car if none exists with the given device ID
             data = {
-                "carModel": car_model,
-                "firstName": first_name,
-                "lastName": last_name,
-                "phone": phone,
-                "email": email,
-                "manufactureYear": manufacture_year,
-                "licensePlateNumber": license_plate_number,
-                "speed": extracted_data["speed"],
-                "fuel_consumption": extracted_data["fuel_consumption"],
-                "emissions": extracted_data["emissions"],
-                "distance": extracted_data["distance"],
-                "next_maintenance": extracted_data["next_maintenance"],
-                "deviceId": device_id
-            }
+            "carModel": car_model,
+            "firstName": first_name,
+            "lastName": last_name,
+            "phone": phone,
+            "email": email,
+            "manufactureYear": manufacture_year,
+            "licensePlateNumber": license_plate_number,
+            "speed": extracted_data["speed"],
+            "fuel_consumption": extracted_data["fuel_consumption"],
+            "emissions": extracted_data["emissions"],
+            "distance": extracted_data["distance"],
+            "next_maintenance": extracted_data["next_maintenance"],
+            "deviceId": device_id,
+            
+            # Adding the newly generated random data
+            "fuel_level": extracted_data["fuel_level"],
+            "engine_temperature": extracted_data["engine_temperature"],
+            "battery_voltage": extracted_data["battery_voltage"],
+            "oil_pressure": extracted_data["oil_pressure"]
+        }
+
 
             car_id = cars_collection.insert_one(data).inserted_id
             return jsonify({"message": "Car added", "car_id": str(car_id), "data": extracted_data}), 201
