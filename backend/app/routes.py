@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 import google.generativeai as genai
+from dotenv import load_dotenv
 import base64
 import json
 import os
@@ -9,15 +10,18 @@ from . import mongo
 
 main = Blueprint('main', __name__)
 
-# MongoDB collection for cars (make sure mongo is properly initialized in your app)
+
 cars_collection = mongo.db.cars
 
 # Simulate an AI-based function to extract data from an image
 
 def process_image_for_data(image_path):
+    load_dotenv()
     # Configure the API key for Google Generative AI
-    genai.configure(api_key="AIzaSyCHtPKOSUnw8MlZEFRNkjtCQPqaQKArMCE")
+    
+    api_key = os.getenv("GENAI_API_KEY")  # Récupère la clé API depuis le .env
     model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+    genai.configure(api_key=api_key)
     with open(image_path, "rb") as image_file:
         image_data = image_file.read()
     encoded_image = base64.b64encode(image_data).decode('utf-8')

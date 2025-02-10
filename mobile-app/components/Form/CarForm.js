@@ -84,7 +84,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
             setLoading(false);
             setShouldRefetch(true);
             navigation.navigate('Dashboard');
-            setFormData({});
+            
         }
     };
 
@@ -136,8 +136,8 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
             <Text style={styles.title}>Personalize your experience</Text>
             <Text style={styles.smallText}>Please fill in car information</Text>
             <TextInput onChangeText={(text) => handleChange("carModel", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Car Model" style={styles.input} />
-            <TextInput onChangeText={(text) => handleChange("manufactureYear", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Manufacture Year" style={styles.input} />
-            <TextInput onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
+            <TextInput keyboardType="numeric" onChangeText={(text) => handleChange("manufactureYear", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Manufacture Year" style={styles.input} />
+            <TextInput keyboardType="numeric" onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
 
             <TouchableOpacity onPress={() => handleImageSelection("camera")} style={styles.button}>
                 <Text style={styles.text}>Take Photo</Text>
