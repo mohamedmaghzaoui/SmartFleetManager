@@ -1,10 +1,28 @@
 import * as React from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { CarContext } from '../CarContext';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export const CarScreen = () => {
   const { car, loading } = React.useContext(CarContext);
+
+  if (!car) {
+    return (
+      <View>
+        <Text>no data</Text>
+      </View>
+    );
+  }
+
+  // Fonction pour afficher une ligne de détail uniquement si la valeur est valide
+  const renderDetail = (label, value, unit = "") => {
+    if (value === "Not provided") return null;
+    return (
+      <Text style={styles.detailText}>
+        {label}: <Text style={styles.highlight}>{value}{unit}</Text>
+      </Text>
+    );
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.mainContainer}>
@@ -15,24 +33,25 @@ export const CarScreen = () => {
         <Text style={styles.licensePlate}>{car.licensePlateNumber}</Text>
 
         <View style={styles.horizontalLine} />
-        
+
         <Text style={styles.detailTitle}>Vehicle Details</Text>
-        
+
         <View style={styles.detailsContainer}>
-          <Text style={styles.detailText}>Speed: <Text style={styles.highlight}>{car.speed} km/h</Text></Text>
-          <Text style={styles.detailText}>Total Distance: <Text style={styles.highlight}>{car.distance} km</Text></Text>
-          <Text style={styles.detailText}>Fuel Consumption: <Text style={styles.highlight}>{car.fuel_consumption} L/100km</Text></Text>
-          <Text style={styles.detailText}>Emissions: <Text style={styles.highlight}>{car.emissions} g/km</Text></Text>
-          <Text style={styles.detailText}>Battery Voltage: <Text style={styles.highlight}>{car.battery_voltage} V</Text></Text>
-          <Text style={styles.detailText}>Engine Temperature: <Text style={styles.highlight}>{car.engine_temperature}°C</Text></Text>
-          <Text style={styles.detailText}>Fuel Level: <Text style={styles.highlight}>{car.fuel_level} %</Text></Text>
-          <Text style={styles.detailText}>Oil Pressure: <Text style={styles.highlight}>{car.oil_pressure} psi</Text></Text>
+          {renderDetail("Manufacture Year", car.manufactureYear)}
+          {renderDetail("Speed", car.speed, " km/h")}
+          {renderDetail("Total Distance", car.distance, " km")}
+          {renderDetail("Fuel Consumption", car.fuel_consumption, " L/100km")}
+          {renderDetail("Emissions", car.emissions, " g/km")}
+          {renderDetail("Battery Voltage", car.battery_voltage, " V")}
+          {renderDetail("Engine Temperature", car.engine_temperature, "°C")}
+          {renderDetail("Fuel Level", car.fuel_level, " %")}
+          {renderDetail("Oil Pressure", car.oil_pressure, " psi")}
         </View>
 
         <View style={styles.horizontalLine} />
-        
+
         <Text style={styles.detailTitle}>Maintenance</Text>
-        <Text style={styles.detailText}>Next Maintenance: <Text style={styles.highlight}>{car.next_maintenance} km</Text></Text>
+        <Text style={styles.detailText}>Next Maintenance: <Text style={styles.highlight}>{car.next_maintenance}</Text></Text>
       </View>
     </ScrollView>
   );

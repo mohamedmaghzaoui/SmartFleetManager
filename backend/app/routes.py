@@ -1,5 +1,8 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
+import google.generativeai as genai
+import base64
+import json
 import os
 import random
 from . import mongo
@@ -11,20 +14,61 @@ cars_collection = mongo.db.cars
 
 # Simulate an AI-based function to extract data from an image
 
-def process_image_for_data(image_file):
+def process_image_for_data(image_path):
+    # Configure the API key for Google Generative AI
+    genai.configure(api_key="AIzaSyCHtPKOSUnw8MlZEFRNkjtCQPqaQKArMCE")
+    model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+    with open(image_path, "rb") as image_file:
+        image_data = image_file.read()
+    encoded_image = base64.b64encode(image_data).decode('utf-8')
+    
+    prompt = """Analyze the provided car dashboard image and extract the following data:  
+- **Speed** (km/h)  
+- **FuelConsumption** (L/100km)  
+- **Emissions** (g/km)  
+- **Distance** (km)  
+- **NextMaintenance** (remaining km)  
+- **FuelLevel** (percentage %)  
+- **EngineTemperature** (°C)  
+- **BatteryVoltage** (V)  
+- **OilPressure** (bars)  
+
+### **Instructions importantes :**  
+- Return a **valid JSON object** that can be directly parsed using `json.loads()`.  
+- The response must **ONLY** contain the JSON object, with **no additional text, no markdown, and no code block indicators (`json`)**.  
+- If a value **cannot be determined**, set it to `"Not provided"` (as a **string**, not `null`).  
+
+### **Example output (valid JSON):**  
+{
+    "Speed": 80,
+    "FuelConsumption": "Not provided",
+    "Emissions": "Not provided",
+    "Distance": 300250,
+    "NextMaintenance": "Not provided",
+    "FuelLevel": "Not provided",
+    "EngineTemperature": "Not provided",
+    "BatteryVoltage": "Not provided",
+    "OilPressure": "Not provided"
+}  
+"""  
+
+
+    response = model.generate_content([{'mime_type': 'image/jpeg', 'data': encoded_image}, prompt])
+
+    # Print the response
+    clean_json = response.text.strip("```json").strip("```").strip()
+    data = json.loads(clean_json)
     # AI image processing logic (for now, we'll return random data)
     return {
-        "speed": random.randint(100, 220),  # Random speed in km/h
-        "fuel_consumption": round(random.uniform(5.0, 15.0), 2),  # Random fuel consumption in L/100km
-        "emissions": round(random.uniform(50.0, 200.0), 2),  # Random emissions in g CO2/km
-        "distance": random.randint(5000, 20000),  # Random distance in km
-        "next_maintenance": random.randint(1000, 5000),  # Random maintenance distance in km
-        
-        # Reasonable random data for car metrics
-        "fuel_level": random.randint(20, 100),  # Fuel level as a percentage (20% to 100%)
-        "engine_temperature": random.randint(70, 110),  # Engine temperature in Celsius (70°C to 110°C)
-        "battery_voltage": round(random.uniform(12.5, 14.5), 2),  # Battery voltage in volts (12.5V to 14.5V)
-        "oil_pressure": round(random.uniform(20.0, 80.0), 2),  # Oil pressure in PSI (20 to 80 PSI)
+        "speed": data.get("Speed", "Not provided"),
+        "fuel_consumption": data.get("FuelConsumption", "Not provided"),
+        "emissions": data.get("Emissions", "Not provided"),
+        "distance": data.get("Distance", "Not provided"),
+        "next_maintenance": data.get("NextMaintenance", "Not provided"),
+        "fuel_level": data.get("FuelLevel", "Not provided"),
+        "engine_temperature": data.get("EngineTemperature", "Not provided"),
+        "battery_voltage": data.get("BatteryVoltage", "Not provided"),
+        "oil_pressure": data.get("OilPressure", "Not provided"),
     }
 
 

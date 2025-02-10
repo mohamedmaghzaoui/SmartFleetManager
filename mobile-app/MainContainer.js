@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { DashboardScreen } from "./components/DashboardScreen";
 import { MapScreen } from "./components/MapScreen";
 
-import {NotificationScreen} from "./components/NotificationScreen"
+import { ProfileScreen } from "./components/ProfileScreen";
 import { CameraScreen } from "./components/CameraScreen";
 import { CarScreen } from "./components/CarScreen";
 
@@ -36,8 +36,8 @@ export const MainContainer = () => {
             } else if (route.name === "Camera") {
               iconName = focused ? "camera" : "camera-outline"; // Camera icon
 
-            } else if (route.name === "Notification") {
-              iconName = focused ? "notifications" : "notifications-outline"; // Notification icon
+            } else if (route.name === "Profile") {
+              iconName = focused ? "person" : "person-outline"; // Notification icon
             } else if (route.name === "Car") {
               iconName = focused ? "car" : "car-outline"; // Notification icon
             }
@@ -54,7 +54,7 @@ export const MainContainer = () => {
         <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Dashboard" component={DashboardScreen} />
         <Tab.Screen name="Camera" component={CameraScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
    
         
       </Tab.Navigator>

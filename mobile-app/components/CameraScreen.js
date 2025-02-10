@@ -29,7 +29,7 @@ export const CameraScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-     {currentForm==0 ?<UserForm formData={formData} handleChange={handleChange} setcurrentForm={setcurrentForm} /> : <CarForm handleChange={handleChange} formData={formData} setcurrentForm={setcurrentForm} /> }
+     {currentForm==0 ?<UserForm formData={formData} handleChange={handleChange} setcurrentForm={setcurrentForm} /> : <CarForm handleChange={handleChange} setFormData={setFormData} formData={formData} setcurrentForm={setcurrentForm} /> }
     </ScrollView>
   );
 };
