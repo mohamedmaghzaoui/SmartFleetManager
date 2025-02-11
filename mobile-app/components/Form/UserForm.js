@@ -23,6 +23,7 @@ export const UserForm = ({ setcurrentForm, handleChange, formData }) => {
       <Text style={styles.smallText}>Please Fill personal information</Text>
 
       <TextInput
+        value={formData.firstName || ""}
         onChangeText={(text) => handleChange("firstName", text)}
         outlineColor="lightgrey"
         activeOutlineColor="#1F87FE"
@@ -31,6 +32,7 @@ export const UserForm = ({ setcurrentForm, handleChange, formData }) => {
         style={styles.input}
       />
       <TextInput
+        value={formData.lastName || ""}
         onChangeText={(text) => handleChange("lastName", text)}
         outlineColor="lightgrey"
         activeOutlineColor="#1F87FE"
@@ -39,6 +41,7 @@ export const UserForm = ({ setcurrentForm, handleChange, formData }) => {
         style={styles.input}
       />
       <TextInput
+        value={formData.phone || ""}
         onChangeText={(text) => handleChange("phone", text)}
         keyboardType="numeric"
         outlineColor="lightgrey"
@@ -48,6 +51,7 @@ export const UserForm = ({ setcurrentForm, handleChange, formData }) => {
         style={styles.input}
       />
       <TextInput
+        value={formData.email || ""}
         onChangeText={(text) => handleChange("email", text)}
         keyboardType="email-address"
         outlineColor="lightgrey"

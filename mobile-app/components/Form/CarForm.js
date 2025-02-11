@@ -141,9 +141,9 @@ export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
             <PaperProgressBar progress={1} color="#1F87FE" style={styles.progress} />
             <Text style={styles.title}>Personalize your experience</Text>
             <Text style={styles.smallText}>Please fill in car information</Text>
-            <TextInput onChangeText={(text) => handleChange("carModel", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Car Model" style={styles.input} />
-            <TextInput keyboardType="numeric" onChangeText={(text) => handleChange("manufactureYear", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Manufacture Year" style={styles.input} />
-            <TextInput  onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
+            <TextInput value={formData.carModel || ""} onChangeText={(text) => handleChange("carModel", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Car Model" style={styles.input} />
+            <TextInput value={formData.manufactureYear || ""} keyboardType="numeric" onChangeText={(text) => handleChange("manufactureYear", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Manufacture Year" style={styles.input} />
+            <TextInput value={formData.licensePlateNumber || ""}  onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
             <TouchableOpacity onPress={() => handleImageSelection("camera")} style={styles.button}>
                 <Text style={styles.text}>Take Photo</Text>
             </TouchableOpacity>
