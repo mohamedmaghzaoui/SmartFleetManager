@@ -9,8 +9,8 @@ import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
 
-export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData }) => {
-    const [error, setError] = useState("");
+export const CarForm = ({ setcurrentForm, handleChange, formData }) => {
+    const [error, setError] = useState(""); //error state
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const { setShouldRefetch } = useContext(CarContext);
@@ -18,16 +18,18 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
     const [image, setImage] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-
+    //get stored device id
     useEffect(() => {
         const getDeviceId = async () => {
             try {
                 let storedDeviceId = await SecureStore.getItemAsync('deviceId');
                 if (!storedDeviceId) {
+                    //create new device id
                     storedDeviceId = await Crypto.digestStringAsync(
                         Crypto.CryptoDigestAlgorithm.SHA256,
                         Device.brand + Device.modelName + Math.random().toString()
                     );
+                    //store device id
                     await SecureStore.setItemAsync('deviceId', storedDeviceId);
                 }
                 setDeviceId(storedDeviceId);
@@ -45,6 +47,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
             console.log("Device ID is not ready");
             return;
         }
+
 
         if (!formData.carModel || !formData.manufactureYear || !formData.licensePlateNumber || !formData.image?.uri) {
             setError("Please fill all the fields before continuing.");
@@ -69,6 +72,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
                 name: "image.jpg"
             });
             newFormData.append("deviceId", deviceId);
+            //send car data to api
 
             const response = await axios.post(url, newFormData, {
                 headers: {
@@ -83,11 +87,12 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
         } finally {
             setLoading(false);
             setShouldRefetch(true);
+            //navigate to dashboard
             navigation.navigate('Dashboard');
             
         }
     };
-
+    //handle image permissions
     const getPermission = async () => {
         const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
         const mediaPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -98,6 +103,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
         }
         return true;
     };
+    
 
     const handleImageSelection = async (source) => {
         const hasPermission = await getPermission();
@@ -137,16 +143,13 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
             <Text style={styles.smallText}>Please fill in car information</Text>
             <TextInput onChangeText={(text) => handleChange("carModel", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Car Model" style={styles.input} />
             <TextInput keyboardType="numeric" onChangeText={(text) => handleChange("manufactureYear", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="Manufacture Year" style={styles.input} />
-            <TextInput keyboardType="numeric" onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
-
+            <TextInput  onChangeText={(text) => handleChange("licensePlateNumber", text)} outlineColor='lightgrey' activeOutlineColor='#1F87FE' mode='outlined' label="License Plate Number" style={styles.input} />
             <TouchableOpacity onPress={() => handleImageSelection("camera")} style={styles.button}>
                 <Text style={styles.text}>Take Photo</Text>
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => handleImageSelection("gallery")} style={styles.button}>
                 <Text style={styles.text}>Choose from Gallery</Text>
             </TouchableOpacity>
-
             {image && (
                 <View style={styles.imageWrapper}>
                     <Image source={{ uri: image }} style={styles.image} />
@@ -158,7 +161,7 @@ export const CarForm = ({ setcurrentForm, handleChange, formData, setFormData })
 
             <Button onPress={() => setcurrentForm(0)} title="Previous" color="#007BFF" />
 
-            <Button onPress={handleSubmit} title={loading ? "Sending..." : "Send"} color="green" disabled={loading} />
+            <Button  style={styles.sendButton}  onPress={handleSubmit} title={loading ? "Sending..." : "Send"} color="green" disabled={loading} />
 
             {loading && <ActivityIndicator size="large" color="#007BFF" style={{ marginTop: 10 }} />}
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -176,6 +179,7 @@ const styles = StyleSheet.create({
     image: { width: 100, height: 100, borderRadius: 10 },
     errorText: { color: "red", marginTop: 10 },
     text: { color: "#fff" },
+    
     input: { height: 40, backgroundColor: "#fff", padding: 10, marginBottom: 20, marginTop: 20, width: '80%' },
 });
 

@@ -5,7 +5,8 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 // DashboardScreen Component
 export const DashboardScreen = ({ navigation }) => {
   const {car,loading}=useContext(CarContext)
-  const currentDate = new Date().toLocaleDateString(); // You can format it as needed
+  const currentDate = new Date().toLocaleDateString(); 
+  //check if car data exist
   if (!car) {
     return (
       <View>

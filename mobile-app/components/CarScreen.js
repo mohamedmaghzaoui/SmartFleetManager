@@ -4,8 +4,9 @@ import { CarContext } from '../CarContext';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export const CarScreen = () => {
+  
   const { car, loading } = React.useContext(CarContext);
-
+// check if car data exist
   if (!car) {
     return (
       <View>
@@ -14,7 +15,7 @@ export const CarScreen = () => {
     );
   }
 
-  // Fonction pour afficher une ligne de détail uniquement si la valeur est valide
+  // render detail only if valid data provided
   const renderDetail = (label, value, unit = "") => {
     if (value === "Not provided") return null;
     return (

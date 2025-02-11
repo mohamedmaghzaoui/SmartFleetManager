@@ -6,6 +6,7 @@ import { CarForm } from './Form/CarForm';
 
 
 export const CameraScreen = () => {
+  
   const [formData,setFormData]=useState(({
     firstName:"",
     lastName:"",
@@ -19,6 +20,7 @@ export const CameraScreen = () => {
 
   
   const [currentForm, setcurrentForm] = useState(0)
+  //handel form input change
   const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
   };

@@ -2,7 +2,9 @@
 
 # dependencies
 node_modules/
+# Fichiers d'environnement de développement
 .env
+*.env
 
 # Expo
 .expo/

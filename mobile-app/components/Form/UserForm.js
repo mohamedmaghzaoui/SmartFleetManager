@@ -5,7 +5,7 @@ import { ProgressBar as PaperProgressBar } from "react-native-paper";
 
 export const UserForm = ({ setcurrentForm, handleChange, formData }) => {
   const [error, setError] = useState("");
-
+//go to next form after error check
   const handleNext = () => {
     if (!formData.firstName || !formData.lastName || !formData.phone || !formData.email) {
       setError("Please fill all the fields before continuing.");

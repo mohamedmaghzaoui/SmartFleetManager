@@ -8,7 +8,7 @@ export const CarProvider = ({ children }) => {
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [shouldRefetch, setShouldRefetch] = useState(false);
-  const url = process.env.EXPO_PUBLIC_API_URL + "/api/cars"; // ✅ Ensure proper URL formatting
+  const url = process.env.EXPO_PUBLIC_API_URL + "/api/cars"; 
 
   const fetchCar = async () => {
     try {

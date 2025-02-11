@@ -29,7 +29,7 @@ export const MapScreen = () => {
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
 
-    // Show the location in an alert (optional)
+    // Show the location in an alert 
     Alert.alert(
       'Your Location',
       `Latitude: ${location.coords.latitude}\nLongitude: ${location.coords.longitude}`
@@ -58,7 +58,7 @@ export const MapScreen = () => {
       const subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 10000, // Update every 1 second
+          timeInterval: 10000, // Update every 10 second
           distanceInterval: 1, // Update if location changes by 1 meter
         },
         (newLocation) => {
